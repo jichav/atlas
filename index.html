@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <title>Atlas pražských kuriozit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link
+    href="https://api.mapbox.com/mapbox-gl-js/v3.17.0/mapbox-gl.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* === ZÁKLADNÍ ROZVRŽENÍ STRÁNKY === */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* === ZÁHLAVÍ === */
+    header {
+      padding: 8px 18px;
+      background: #f0e5d0;
+      border-bottom: 3px solid #ddd;
+      color: #111;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+    }
+
+    header strong {
+    font-size: 20px;
+    letter-spacing: 0.3px;
+    }
+
+    /* === HLAVNÍ ČÁST === */
+    .app {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+
+    /* mapové okno */
+    #map {
+      flex-basis: 55%;
+      min-width: 0;
+    }
+
+    /* panel s textem */
+    #sidebar {
+      flex-basis: 45%;
+      border-left: 3px solid #ddd;
+      padding: 12px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    #sidebar h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    #sidebar p {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #666;
+    }
+
+    /* úvodní okno */
+    #sidebar .placeholder {
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* === OVLÁDACÍ PRVKY MAPBOXU === */
+    .mapboxgl-ctrl.style-switcher,
+    .mapboxgl-ctrl.category-filter {
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px 6px;
+      margin: 10px;
+      border-radius: 5px;
+    }
+
+    .style-switcher button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      padding: 2px 4px;
+    }
+
+    .style-switcher button.active {
+      text-shadow: 0 0 3px #000;
+    }
+
+    .category-filter label {
+      display: block;
+      font-size: 11px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .category-filter button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 2px 4px;
+    }
+
+    /* === BAREVNÉ ŠTÍTKY KATEGORIÍ === */
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 11px;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .badge-extremy  { background: #ee77a7; }
+    .badge-priroda  { background: #44a248; }
+    .badge-podzemi  { background: #616161; }
+    .badge-doprava  { background: #1f89e5; }
+    .badge-ulice    { background: #e53734; }
+    .badge-ostatni  { background: #fa8900; }
+
+    /* nastavení obrázků */
+    img.detail-foto {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 8px 0;
+      border-radius: 4px;
+    }
+
+    /* === ZÁPATÍ === */
+    .bottom-bar {
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      background: #f0e5d0;
+      border-top: 3px solid #ddd;
+      font-size: 13px;
+    }
+
+    .bottom-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #444;
+    }
+
+    .mode-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 13px;
+    }
+
+    .mode-toggle span {
+      cursor: pointer;
+    }
+
+    .mode-dot {
+      font-size: 13px;
+    }
+
+    .mode-dot.active {
+      font-weight: bold;
+    }
+
+    .bottom-right {
+      font-size: 12px;
+      color: #555;
+    }
+
+    /* === DIVIDER === */
+    #divider {
+      width: 6px;
+      cursor: col-resize;
+      background: #ddd;
+      position: relative;
+    }
+
+    #divider::before {
+      content: '⋮⋮';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 11px;
+      color: #777;
+      pointer-events: none;
+    }
+
+    /* === ZOBRAZENÍ PRO MOBILNÍ ZAŘÍZENÍ === */
+    @media (max-width: 768px) {
+      .app {
+        flex-direction: column;
+      }
+      #divider {
+        height: 4px;
+        width: 100%;
+        cursor: row-resize;
+      }
+      #sidebar {
+        border-left: none;
+        border-top: 1px solid #ddd;
+        height: 40vh;
+      }
+      #map {
+        height: 60vh;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+  <!-- ZÁHLAVÍ APLIKACE -->
+  <header>
+  <div><strong>Atlas pražských kuriozit</strong></div>
+  <div style="font-size:13px;color:#111;">
+    <a href="https://drive.google.com/file/d/1LW3Ema7m-ryMYCWTpwwZyf00fc57rAqR/view"
+      target="_blank" 
+      style="text-decoration:none; color:#111;">
+      <strong style="font-size:11px;">ebook</strong>
+    </a>
+  </div>
+</header>
+
+  <!-- HLAVNÍ ČÁST -->
+  <div class="app">
+    <div id="map"></div>
+    <div id="divider"></div>
+
+    <!-- TEXT ÚVODU -->
+    <aside id="sidebar">
+      <h2>ÚVOD</h2>
+      <p class="placeholder">
+        Praha, jak je známo, má mnoho krás, které přitahují ročně miliony
+        turistů z celého světa. Tento atlas má ale za cíl se zaměřit na místa,
+        která nejsou obecně známá ani nutně krásná, ale která jsou vždy
+        velmi zajímavá a v něčem kuriózní. Přemýšleli jste někdy nad tím,
+        kde se v Praze nachází nejvyšší přírodní vodopád, kde je její střed,
+        nebo která ze stovek ulic je ta nejkratší? Vše toto, a mnoho dalšího,
+        spadá do pražských kuriozit a na následujících stranách vám atlas
+        vybraná místa blíže představí.
+      </p>
+
+      <p class="placeholder">
+        Turistika na standardní a běžně známá místa pro lidi poslední
+        dobou ztrácí na atraktivitě, což je vede k vyhledávání nových
+        a intenzivnějších zážitků. Díla zabývající se zajímavými až bizarními
+        místy jsou tedy stále více žádaná, příkladem toho je celosvětově
+        rozšířený Atlas Obscura interaktivně dostupný na webových
+        stránkách a vybrané kuriozity jsou shrnuty i v knižní edici. Z českých
+        děl je žánrovým příkladem například nedávno vydaná kniha Bizarní
+        Česko od Jakuba Pokorného.
+      </p>
+
+      <img class="detail-foto" 
+          src="https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/title.png">
+    </aside>
+  </div>
+
+  <!-- ZÁPATÍ APLIKACE -->
+  <div class="bottom-bar">
+    <div class="bottom-left">
+      <span>Dark</span>
+      <span id="mode-dot-dark" class="mode-dot">◯</span>
+      <span>/</span>
+      <span id="mode-dot-light" class="mode-dot active">◉</span>
+      <span>Light</span>
+    </div>
+    <div class="bottom-right">
+      © Václav Jícha 2025
+    </div>
+  </div>
+
+
+
+
+  <!-- MAPBOX GL JS -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.17.0/mapbox-gl.js"></script>
+  
+  <script>
+    // 1) MAPBOX TOKEN
+    mapboxgl.accessToken = 'pk.eyJ1IjoiamljaGF2IiwiYSI6ImNtamI5cDhjMTA3b3AzZXF1bzk2bmh2YTEifQ.RxFPcew4w2_AV75i1lNxwQ';
+
+    // 2) PODKLADOVÉ STYLY MAPY
+    const lightStyle = 'mapbox://styles/jichav/cmjo9d54v00e601sb5kkifzkx';
+    const darkStyle  = 'mapbox://styles/jichav/cmjba1tt5000d01s37ct13ujt';
+
+    // 3) ID BODOVÝCH VRSTEV VE STYLU
+    const pointLayers = [
+      'extremy-body',
+      'priroda-body',
+      'podzemi-body',
+      'doprava-body',
+      'ulice-body',
+      'ostatni-body'
+    ];
+
+    // konfigurace kategorií - propojení mezi ID vrstvy, CSS třídou a popiskem
+    const categoryConfig = {
+      'extremy-body': { key: 'extremy',  label: 'Geografické extrémy' },
+      'priroda-body': { key: 'priroda',  label: 'Příroda' },
+      'podzemi-body': { key: 'podzemi',  label: 'Podzemí' },
+      'doprava-body': { key: 'doprava',  label: 'Doprava' },
+      'ulice-body':   { key: 'ulice',    label: 'Ulice' },
+      'ostatni-body': { key: 'ostatni',  label: 'Ostatní' }
+    };
+
+    // inicializace mapy
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: lightStyle,
+      center: [14.46, 50.06],
+      zoom: 10
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+
+    const sidebar = document.getElementById('sidebar');
+
+    const allCategories = Object.values(categoryConfig).map(c => c.key);
+    let visibleCategories = new Set(allCategories);
+    let checkboxState = {};
+
+    function setLayerVisibility() {
+      pointLayers.forEach(id => {
+        const cfg = categoryConfig[id];
+        if (!cfg) return;
+        const visible = visibleCategories.has(cfg.key);
+        if (map.getLayer(id)) {
+          map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
+        }
+      });
+    }
+
+    // 4) SLOVNÍK DETAILŮ
+    const detailData = {
+
+      // 1) Geografické extrémy
+      "extremy-body_1": {
+        nazev: "Nejjižnější bod",
+        popis: `Nejjižnější bod je ze všech čtyř určitě nejhezčí svou scenérií
+        v zakleslém říčním údolí pod vrcholem Zvolské Homole. Nachází se na
+        pravém břehu Vltavy u cyklostezky vedoucí z Vraného nad Vltavou na
+        Zbraslav. Zde je odchylka bodu a betonového sloupku pouhé dva metry.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.3.png"
+      },
+
+      "extremy-body_2": {
+        nazev: "Nejzápadnější bod",
+        popis: `Posledním ze čtveřice krajních bodů je nejzápadnější, který se 
+        nachází ve veřejně nepřístupném areálu Letiště Václava Havla. 
+        Vytyčený sloupek byl tedy umístěn nedaleko plotu letiště a od 
+        přesného bodu je tedy vzdálen více než 117 m.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.4.png"
+      },
+
+      "extremy-body_3": {
+        nazev: "Nejsevernější bod",
+        popis: `Nejsevernější bod se nachází na jihovýchodním okraji obce
+        Hovorčovice na konci Veleňské ulice. Skutečný bod se nachází
+        uprostřed silnice na opačné straně železničního přejezdu 16 m
+        daleko.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.1.png"
+      },
+
+      "extremy-body_4": {
+        nazev: "Nejvýchodnější bod",
+        popis: `Za nejvýchodnějším bodem je potřeba se vydat do Klánovického
+        lesa do části zvané Vidrholec. Tento bod se nachází asi půl kilometru
+        od Úval a je snadno dostupný po zelené turistické značce. Betonový
+        sloupek se původně nacházel blíže skutečnému nejvýchodnějšímu
+        bodu, ale z důvodu ochrany přírody byl na začátku roku 2021
+        přemístěn blíže cestě a je nyní lépe přístupný. Na místě skutečného
+        nejvýchodnějšího bodu je umístěn žulový mezník s křížkem,
+        vzdálenost mezi ním a sloupkem je 52 m.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.2.png"
+      },
+
+      "extremy-body_5": {
+        nazev: "Nejnižší bod",
+        popis: `Místo s přirozeně nejnižší nadmořskou výškou se nachází tam, kde
+        řeka Vltava opouští hranice Prahy. Je tomu tak na severu města
+        v oblasti zvané Zámky, naproti Zámecké rokli u ústí Čimického
+        potoka. Hladina Vltavy má v těchto místech nadmořskou výšku
+        okolo 175,4 metrů, přesná hodnota je proměnlivá a závisí na vodním
+        stavu. Zcela nejhlubším místem bude tedy dno řeky v tomto místě.
+        Vltava opouští Prahu v relativně úzkém a velmi zahloubeném údolí,
+        kde jsou po obou stranách jejího toku velká výšková převýšení. Na
+        levém břehu se nachází Roztocký háj s nadmořskými výškami přes
+        250 m a na břehu druhém se tyčí skalní stěny přírodní památky
+        Zámky dosahující více než padesát výškových metrů nad hladinu
+        Vltavy.<br><br>
+
+        Zajímavá je například také hloubka Vltavy v Praze, která úzce
+        souvisí s nejnižšími místy. Nejhlubší je jednoznačně Vltava pod
+        Vyšehradskou skálou, kde je udávaná hloubka mezi 8 a 10 metry.
+        Pod zříceninou Baba v Podbabě je hloubka řeky prokazatelně
+        větší než 5 metrů a zajímavým hlubokým místem je také dolík mezi
+        Žofínem a Střeleckým ostrovem, kde bylo naměřeno 6 metrů.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.5.png"
+      },
+
+      "extremy-body_6": {
+        nazev: "Nejvyšší bod",
+        popis: `
+        <p>O nejvyšším bodu v Česku není pochyb, protože Sněžku zná každý
+        již ze základní školy. Jak je to ale s nejvyšším bodem hlavního
+        města? Situace zde není tak jednoznačná, protože se nejedná
+        o jasně definovanou výškovou kótu. Nejvyšší nadmořská výška na
+        území Prahy se nachází na její západní hranici a činí 399,2 metrů
+        nad mořem, jak lze podrobně vidět na mapě 1.7.</p>
+
+        <p>Co by se stalo, pokud by hladina moře stoupla na 385 m n. m.? Tuto
+        otázku si položil i autor atlasu a pokusil se na ni odpovědět pomocí
+        mapy 1.6, která zobrazuje výškovou analýzu širšího okolí Zličína.
+        Právě v této oblasti se nachází naprostá většina území Prahy, která
+        leží nad určenou hladinou. Mimo některých výškových staveb je
+        výjimkou pouze samostatný vrch Čihadlo u Točné na jihu Prahy,
+        jehož vrchol dosahuje výšky 388 m n. m. a při naší hypotéze by tvořil
+        osamocený ostrůvek nad pomyslnou hladinou moře.</p>
+
+        <p>Zpět ke zkoumané oblasti okolí Zličína. Od vrchu Kopanina, kde se
+        nachází vodojem v nadmořské výšce přes 390 m n. m., se táhne pás
+        vyšší země k Třebonicím. Zde lze nalézt bod v poli o výšce 392,2 m n. m.
+        Pás se dále stáčí ke stanici metra Zličín. Celé zličínské depo se také
+        nachází nad naší hranicí, a nově postavené sídliště severně od depa
+        se nachází dokonce ve výšce nad 390 m n. m. Nejvyšší vrchol této
+        oblasti je o tři metry vyšší než zmíněný bod u Třebonic a nachází
+        se u mostu přes Pražský okruh, v místě autobusové zastávky Depo
+        Zličín. Od tohoto místa směrem na západ k hranicím Prahy je již na
+        mapě patrná formace vrchu Růžová.</p>
+
+        <p>Někdo by se mohl divit, že nejvyšším bodem není známý Petřín nebo
+        Bílá Hora. Vrchol Petřína je ale pouhých 327 metrů nad mořem a Bílá
+        Hora se nachází v 381 m n. m. Pokud bychom chtěli určit nejvyšší
+        stabilní bod ve městě včetně staveb, dominantním a jasným vrcholem
+        Prahy by byl vrchol Žižkovské televizní věže s kótou 474 m n. m.
+        Pro představu vrchol Petřínské rozhledny se nachází v nadmořské
+        výšce 385 m.</p>
+
+        <img class="detail-foto"
+            src="https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.6.png">
+
+        <p>Dle provedeného výzkumu je nejvyšším bodem nenápadné a nijak
+        neoznačené místo uprostřed pole na hranici Prahy s obcí Chrášťany
+        v oblasti zvané Teleček, blízko nově vzniklého průmyslového
+        areálu. Nadmořská výška je zde 399,2 metrů nad mořem a nejde
+        o vrchol, ale o úpatí návrší Růžová (410 m n. m.), které leží ještě dva
+        kilometry dále na západ. Necelých dvě stě metrů na severozápad
+        od určeného místa se nachází vysílač, mnohdy chybně udávaný za
+        nejvyšší vrchol. Ten se nachází několik metrů mimo území Prahy
+        a je postaven v nadmořské výšce o necelý metr a půl nižší než je
+        nejvyšší bod.</p>
+
+        <img class="detail-foto"
+        src="https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.7.png">
+        `
+      },
+
+      "extremy-body_7": {
+        nazev: "Pražské středy",
+        popis: `Určení středu libovolného nepravidelného území, jakýmž je
+        i Praha, není jednoduchý úkol. Existuje řada metod a parametrů,
+        které výsledek dokáží ovlivnit. Metodickou inspirací pro sestrojení
+        a vymezení středů Prahy v tomto atlase se stala analýza a článek
+        od autorů Bláha, Dolejš (2017), kteří se zabývali hledáním středů
+        České republiky.<br><br>
+
+        Byly zkonstruovány čtyři různé středy, které se liší polohou
+        i metodikou určení. V mapě jsou barevně rozlišeny:<br><br>
+
+        Zelený bod: Střed diagonál opsaného obdélníku leží u ulice Na
+        Bohdalci v blízkosti vrcholu Bohdalec.<br><br>
+
+        Červený bod: Geometrický střed, také těžiště území, se nachází
+        v blízkosti nákupního centra Eden ve Vršovicích.<br><br>
+
+        Žlutý bod: Střed určený na základě vzdálenosti od hranice.
+        Označuje nejvzdálenější bod od hranic Prahy se Středočeským
+        krajem vzdušnou čarou. Nachází se u Náměstí Jiřího z Lobkovic
+        a nejbližší hranice Prahy je z tohoto místa vzdálena 8,62 km.<br><br>
+
+        Modrý bod: Průsečík spojnic okrajových bodů, tedy úseček
+        spojujících nejsevernější s nejjižnějším a nejzápadnější
+        s nejvýchodnějším bodem. Od roku 2020 je tento střed vyznačen
+        v terénu jako betonový sloupek, podobně jako pražské póly. Nachází
+        se na dětském hřišti Na Balkáně. Zajímavostí je, že z tohoto bodu je
+        to na jižní i západní pól Prahy více než 18 km. Odchylka skutečného
+        bodu a betonového sloupku je 30 m.<br><br>
+
+        Diskuse o středových bodech Prahy byla žhavým tématem v roce
+        2021, kdy se spolu s pražskými póly postavil také pátý, středový.
+        Ten byl zbudován na Žižkově a to vyvolalo na internetu debaty
+        mezi geodety a laickou veřejností. Ať už se přikloníte k jakémukoliv
+        středovému bodu, je důležité si uvědomit, že každý z nich má své
+        specifické vlastnosti a odráží jiný aspekt rozlehlosti a tvaru Prahy.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.8.png"
+      },
+
+
+      // 2) Příroda  
+      "priroda-body_1": {
+        nazev: "Vodopády v Modřanské rokli",
+        popis: `Pravděpodobně nejvýznamnější pražská přírodní vodopádová série
+        se nachází na Lhoteckém potoce, pravostranném přítoku Písnického
+        potoka, tvořící jedno z postranních údolí známé Modřanské
+        rokle. Lhotecký potok pramení v Cholupicích a směřuje svůj tok
+        k severovýchodu. Pod cestou spojující Cholupice s přehradní hrází
+        Libušské nádrže v Modřanské rokli se začíná pozvolna zařezávat
+        a přibližně po 250 m začíná poměrně hluboká rokle, kterou potok
+        vyhloubil v měkkých sedimentech charakteru jílovců a prachovců.
+        Eroze nepříliš vodného toku je poměrně intenzivní, o čemž svědčí
+        čerstvě popadané stromy, které byly erozí potoka a následným
+        sesuvem materiálu po svahu podemlety a vlastní vahou se zřítily do
+        rokle či přes ni.<br><br>
+
+        První vodopád se nachází přesně v místě, kde rokle začíná. Potok se
+        zde stáčí o 90 stupňů vlevo. Jeho voda padá nejprve nízkým stupněm
+        o výšce 0,7 m, v současné době zakrytým spadlým stromem, a po
+        necelých dvou metrech následně pak volným pádem přes převis
+        do hloubky asi 1,4 m. Dynamičnost vývoje lokality dokazují snímky
+        ze serveru geocaching.com a mapy.cz. Podle tohoto zdroje měl na
+        začátku roku 2015 vodopád výšku 2,3 m. Zpětná eroze, rozdělení
+        na dva stupně a akumulace materiálu za napadanými stromy jeho
+        výšku i atraktivitu snížily. Pokud bude vývoj pokračovat stávajícím
+        tempem, vodopád nejspíše v řádu desetiletí zanikne.<br><br>
+
+        Jen o několik desítek metrů dál je vlevo nad roklí pramen,
+        označovaný v mapách.cz a na webu e-studanky.cz názvem Pod
+        Dýmačem. Leží jen několik metrů od hrany rokle a vede od něj
+        k okraji rokle nevýrazný zářez. Za vyšších vodních stavů na tomto
+        místě vzniká sezónní až periodický vodopád o výšce 2,5 m, padající
+        přes převislou stěnu rokle. Voda dopadá do sedimentů tvořených
+        destrukcí stěny rokle a příkře stéká do Lhotského potoka. Zajímavé
+        je, že vodopád má jen plošně nepatrné povodí, resp. sběrnou oblast
+        (jen několik desítek m2), která by na delší dobu nedokázala vytvořit
+        průtok, který sezónní vodopád mívá. Je proto pravděpodobné, že
+        pramen odvodňuje rozsáhlejší oblast. S ohledem na nízkou vodnost
+        zde eroze postupuje výrazně pomaleji. Tento vodopád dosud nebyl
+        nikde popsán, s výjimkou webu e-studanky kde se uvádí, že „vtok
+        pramene do Libušského potoka (správně má být Lhotského) vytváří
+        zajímavou erozi hlinitého valu“.<br><br>
+
+        Poslední vodopád je na Lhotském potoce těsně u jeho ústí do
+        Písnického potoka. Má charakter kaskádové peřeje o sklonu okolo
+        20° a výšce 1,1 m. Vznikl na odolnějším horninovém podloží. Vyniká
+        pouze za vyšších vodních stavů a mimo Prahu by objekt podobného
+        charakteru pravděpodobně vůbec nestál za zmínku.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/2.2.png"
+      },
+
+      "priroda-body_2": {
+        nazev: "Milíčovský vrch",
+        popis: `Milíčovský vrch je jedním ze tří umělých kopců nacházejících
+        se jižně od konečné stanice metra Háje. Všechny tři vrcholy
+        dosahují výšky přes tři sta metrů nad mořem, nejvyšší
+        z nich je Milíčovský vrch s výškou 309,8 m n. m. Haldy jsou
+        tvořeny výkopovým materiálem ze stavby Jižního Města
+        a výstavby linky metra C v úseku Kačerov - Háje z konce 70.
+        let 20. století. Ke konci minulého století byly haldy postupně
+        osazovány stromy a následně na nich byly postaveny
+        asfaltové komunikace. Je z nich poměrně široký výhled.
+        Na severozápad na sídliště Jižní Město a na jihovýchod na
+        Benešovskou a Středočeskou pahorkatinu. V současnosti
+        mají kopce za cíl oddělovat chráněnou část Milíčovského
+        lesa od urbanizovaného území a představovat tak veřejnou
+        zeleň s ochrannou funkcí.<br><br>
+
+        Milíčovské kopce jsou výjimečné nejen svým neobvyklým
+        tvarem a původem, ale také bohatou botanickou diverzitou.
+        Při úpravách kopců na parkovou oblast zde byly vytvořeny
+        neobvyklé cesty inspirované geometrickou sítí a vysázeny
+        různé druhy rostlin, které se úspěšně ujaly a dodnes
+        prosperují. Z vysázených dřevin se nejrychleji šíří růže
+        šípková. Milíčovské kopce tak poskytují pestré možnosti pro
+        dendrology a nadšence do studia stromů a keřů.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/2.3.png"
+      },
+
+      "priroda-body_3": {
+        nazev: "Soutok Berounky a Vltavy",
+        popis: `Soutok dvou velkých řek v hlavním městě je bezesporu zajímavým
+        místem. V pražské čtvrti Lahovice se na 63. kilometru do Vltavy
+        levostranně vlévá širší Berounka. Pokud jste někdy jeli po Strakonické
+        ulici, možná jste z Lahovického mostu zahlédli zanedbaný
+        a neutěšený ostroh soutoku, který neláká k návštěvě. Nachází se
+        zde pouze vyježděné cesty od aut bez jakékoli úpravy. Pokud jste
+        po mostě jeli na kole nebo šli pěšky, určitě vás v jeho severní části
+        zaujaly vyhlídkové věže. Z nich je směrem na východ vidět soutok
+        a na druhou stranu říční niva a impozantní Radotínský most, který
+        se klene nad celým údolím. Soutok je oblíbeným místem pro rybáře,
+        které zde potkáte téměř po celý rok. Zajímavý pohled na soutok je
+        také z pravého břehu Vltavy od Modřanských lagun, které lidé rádi
+        navštěvují zejména v létě a užívají si zde piknik nebo grilování. Toto
+        místo je snadno dostupné z železniční stanice Praha‐Komořany.<br><br>
+
+        Říční niva na soutoku Berounky a Vltavy má rozlohu přes 1300
+        hektarů, což podle Institutu plánování a rozvoje odpovídá téměř
+        třem stům Václavských náměstí vedle sebe. Takto rozsáhlé území
+        přitahuje různé podnikatelské zájmy. Vzhledem k tomu, že většina
+        této plochy je zemědělská půda, rozhodla se Praha vypsat na řešení
+        tohoto území mezinárodní krajinářsko-urbanistickou soutěž. Ta
+        má za cíl nalézt rovnováhu mezi přírodou a stále se rozrůstajícími
+        developerskými projekty. V roce 2023 bylo rozhodnuto, že na tomto
+        území vznikne jeden z největších parků ve střední Evropě, který
+        bude přibližně třináctkrát větší než Stromovka. Je tedy možné, že již
+        za několik let bude toto místo vypadat zcela jinak.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/2.4.png"
+      },
+
+
+      // 3) Podzemí
+        "podzemi-body_1": {
+        nazev: "Malá říčka",
+        popis: `Malá říčka, nacházející se ve
+        Stromovce, představuje zbytek někdejšího vltavského ramene,
+        který zůstal po regulaci Vltavy v letech 1899–1902. Voda z Vltavy do
+        ramene přitéká napouštěcím zařízením, a odtéká nízkou štolou, jejíž
+        vstup je zabezpečen mříží s odklápěcí střední částí. Po 350 metrech
+        podzemního toku následuje na pražské poměry unikátní zajímavost:
+        podzemní soutok Malé říčky s Dejvickým potokem. Prakticky ale
+        o soutok příliš nejde, protože za běžných vodních stavů korytem
+        Dejvického potoka nic neteče, o čemž se lze přesvědčit v otevřené
+        části jeho koryta v Mlýnské ulici. Za přívalového deště zde pak teče
+        srážková voda a zředěné splaškové vody z části Prahy 6, které
+        z důvodů nezahlcení čistírny odpadních vod oddělí odlehčovací
+        komora pod Maďarskou ulicí. V mapách uváděný název Dejvický
+        potok tak zůstává pouze z historických důvodů, protože tudy kdysi
+        skutečně protékal.<br><br>
+
+        Otevřené koryto potoka vedoucí podél Mlýnské ulice se dvakrát
+        ukryje v krátkém tunelu a opět vyjde na povrch, až definitivně zmizí
+        pod zemí a po 150 metrech dospěje k popsanému soutoku s Malou
+        říčkou. Obvykle suchá podzemní chodba Dejvického potoka má
+        paradoxně mnohem větší profil než ta, kterou teče Malá říčka. Ta
+        ústí do velké chodby šikmo a mírně visutě, takže tu vzniká malá
+        peřej. Odtud pak voda míří ke shybce pod plavebním kanálem (kříží
+        tedy mimoúrovňově vltavské rameno), prochází pod Císařským
+        ostrovem a na jeho severním okraji dospěje po třech stech metrech
+        od soutoku k ústí do Vltavy.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/3.1.png"
+      },
+
+        "podzemi-body_2": {
+        nazev: "Opuštěné tunely lomu Požáry",
+        popis: `Dvojice opuštěných lomů skýtá hned několik zajímavostí. Naleznete
+        je nedaleko od městské části Praha-Řeporyje a mimo toho, že jsou
+        součástí Přírodního parku Prokopské a Dalejské údolí, severní
+        z lomů je zároveň Národní přírodní památkou. Ta se rozprostírá
+        na ploše 2,71 hektarů a byla vyhlášena v roce 1982 jako ochrana
+        významného naleziště zkamenělin a je mezinárodně uznávaným
+        stratotypem. Stratotyp je geologická lokalita, která definuje typický
+        sled vrstev, které odpovídají konkrétním historickým geologickým
+        obdobím. Stratotypy jsou určovány a schvalovány komisí, která je
+        součástí Mezinárodního svazu geologických věd.<br><br>
+
+        Vápencové lomy byly do skalního masivu vyhloubeny v první
+        polovině 20. století a propojovala je dodnes dochovaná štola skrz
+        vápencovou skálu. Ikonický je tunel pro úzkokolejnou malodrážku
+        propojující přístupovou cestu s lomem Požáry 1. Malodrážka dříve
+        sloužila k přepravě vytěženého vápence z lomu a dnes na místě
+        nenalezneme ani stopu po kolejích, pouze velmi dobře dochovaný
+        tunel o délce 65 metrů. Oba požárské lomy pak propojuje vyhloubená
+        60 metrů dlouhá štola, jejíž vstup z lomu Požáry 2 je částečně
+        zavalený, takže průchod je o něco náročnější. Třetí štolou v objektu
+        lomů je štola vedoucí směrem na západ z lomu Požáry 2, která je po
+        několika desítkách metrů zavalena a dnes už nikam nevede.<br><br>
+
+        Bývalé lomy jsou dnes již zarostlé, ale turisticky poměrně
+        vyhledávané. Volně přístupné jsou i zmiňované štoly a tunel, díky
+        kterým lokalita stojí za průzkum. Za zmínku také stojí stále funkční
+        lom Požáry na východ od zkoumané lokality. I když z výhledu lom
+        láká k návštěvě a případnému letnímu osvěžení, vstup do areálu
+        lomu je přísně zakázán, protože v něm dodnes probíhá těžba.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/3.2.png"
+      },
+
+
+      // 4) Doprava
+        "doprava-body_1": {
+        nazev: "Smíchov severní nástupiště",
+        popis: `Zástupce zaniklých nádraží reprezentuje nedávno zrušené nádraží
+        Praha‐Smíchov severní nástupiště. Bylo v provozu od roku
+        1862, kdy ho vybudovala Buštěhradská dráha. V roce 1872 bylo
+        společností České západní dráhy vybudováno takzvané Společné
+        nádraží, dnes známé jako Praha‐Smíchov, které v té době sloužilo
+        jako hlavní pražské nákladové nádraží. Severní nástupiště bylo
+        tedy zastíněno tímto větším nádražím. Téhož roku do něj byla
+        zaústěna odbočka Buštěhradské dráhy z Hostivice a o rok později
+        Pražsko-duchcovská dráha od Slaného. Roku 1872 byla rovněž
+        obě smíchovská nádraží napojena Pražskou spojovací dráhou přes
+        Vltavu na dnešní Hlavní nádraží. I když měly Buštěhradské dráhy
+        v plánu rozšíření dosavadního nádraží a zvýšit tak svou kapacitu,
+        koncepce se neosvědčila a musely tak i nadále spolupracovat
+        s Českou západní dráhou a Pražsko-duchcovskou dráhou. Na místě
+        se tedy střetávaly tři konkurenční společnosti.<br><br>
+
+        V posledních letech byla zchátralá nádražní budova uzavřena
+        veřejnosti a frekvence spojů se snižovala. Stanice sloužila pouze
+        k odbavování vlaků mířících na Pražský Semmering, jehož dvojité
+        přemostění nádherné krajiny Prokopského údolí je také zajisté
+        pražskou kuriozitou. V roce 2010 byla uvedena do provozu provizorní
+        zastávka Praha‐Smíchov Na Knížecí nacházející se severně od
+        nádraží, v blízkosti zastávek tramvaje a stanice metra Anděl. Ta byla
+        zavedena především kvůli tramvajové výluce do Řep, ale nakonec
+        v provozu zůstala šest let. Provoz stanice Praha‐Severní nástupiště
+        byl definitivně ukončen 1. října 2023, kdy byla zbourána a s ní
+        i ikonická Radlická lávka. Hlavním důvodem byly developerské záměry
+        a plánovaná přestavba a modernizace nádraží Praha‐Smíchov.
+        Rozlehlý areál nádraží tedy nejspíše již za několik let bude přestaven
+        k nepoznání.`},
+
+        "doprava-body_2": {
+        nazev: "Smyčka Dlabačov",
+        popis: `Smyčka Dlabačov, otevřená roku 1948, bývala jedním z klíčových
+        bodů pražské tramvajové infrastruktury. Společně s blízkou smyčkou
+        Královka, představovala významný dopravní prvek, zajišťující
+        plynulý a efektivní provoz tramvají. Zejména během významných
+        sportovních akcí jako byly všesokolské slety a později spartakiády,
+        které se konaly na strahovském stadionu. Lávky zajišťovaly efektivní
+        mimoúrovňový nástup a výstup lidí.<br><br>
+
+        V současnosti můžete vyrazit z nedávno zrekonstruované točny
+        na Dlabačově na prohlídku Prahy pomocí historické okružní linky
+        42. Na této točně bylo nově zřízeno Bistro Točna, které nabízí
+        neobvyklý zážitek v podobě posezení ve vyřazeném tramvajovém
+        vozu T3. Tyto vozy také stále jezdí na nostalgické lince č. 23, která
+        vede z Královky až na Zvonařku, kde se nachází unikátní kolejový
+        trojúhelník. Výrazným prvkem je i barevné rozlišení obou smyček.
+        Zábradlí na Dlabačově je červené, zatímco Královka je laděna do
+        modra. Smyčky byly dlouhá léta nevyužívané a vzhledem k jejich
+        velkoleposti se jim dodnes občas přezdívá „tramvajová nádraží“.<br><br>
+
+        Plánuje se nový projekt prodloužení tramvajové trati z Dlabačova
+        ke Strahovskému stadionu. Tato trať by měla dvě zastávky, Koleje
+        Strahov a Stadion Strahov, a její délka by činila 1,3 km. Hlavní
+        motivací pro výstavbu této trati je možnost nahrazení autobusových
+        linek č. 143 a 149 tramvajovou dopravou, která nabízí vyšší kapacitu
+        a ekologické výhody v dlouhodobém horizontu. Oblast Strahova
+        je významná nejen díky sportovištím, ale také kvůli studentským
+        kolejím s kapacitou přes 4700 lůžek. Studenti často cestují do Dejvic,
+        kam by vedla jedna z budoucích tramvajových linek.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/4.2.png"
+      },
+
+      "doprava-body_3": {
+        nazev: "Nedokončený most přes Pražský okruh",
+        popis: `Rozestavěný most přes Pražský okruh v Komořanech, v oblasti zvané
+        na Šabatce, je často označovaný jako „most odnikud nikam“. Je jedním
+        z nejvýraznějších symbolů neúspěšných infrastrukturních projektů
+        v Česku. Most měl původně sloužit jako klíčové napojení Modřan na
+        Pražský okruh, avšak dnes je spíše památkou na složité byrokratické
+        a politické procesy. Ty vedly k jeho nedokončení a opuštění.<br><br>
+
+        Projekt mostu na Šabatce byl zahájen s ambiciózním cílem zlepšit
+        dopravní situaci v okolí Prahy. Původně se plánovalo, že most bude
+        součástí rozsáhlého systému silniční infrastruktury, který měl propojit
+        různá městská centra a přispět k plynulejšímu provozu. Stavba mostu
+        začala v roce 2010, a od začátku se potýkala s řadou problémů,
+        včetně nedostatečné přípravy a chybějících stavebních povolení.<br><br>
+
+        Jedním z největších problémů, které vedly k nedokončení mostu, byly
+        finanční a technické komplikace. Projekt stál více než 110 milionů
+        korun, avšak jeho realizace se ukázala být mnohem nákladnější
+        a složitější, než se původně očekávalo. K tomu se přidaly komplikace
+        spojené se získáním potřebných povolení a souhlasů. To vedlo
+        v roce 2013 k zastavení prací a následně k úplnému opuštění stavby.<br><br>
+
+        V současné době most stojí již mnoho let nedokončený a opuštěný,
+        což přitahuje pozornost nejen místních obyvatel, ale i médií a turistů.
+        Délka mostu je necelých 150 m a jeho šířka v nejužším místě je 20 m.
+        Okolí je opatřeno ploty, které mají lidem zabránit ve vstupu na most,
+        ale patrná poničení naznačují, že na most lidé i přesto chodí. Jeho
+        budoucnost je nejistá, neboť dosud neexistuje konkrétní plán na jeho
+        dokončení nebo využití. Místní samosprávy a státní orgány diskutují
+        o možných řešeních, ale zatím se nepodařilo dosáhnout konsensu.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/4.3.png"
+      },
+
+
+      // 5) Ulice
+        "ulice-body_1": {
+        nazev: "Nejkratší ulice",
+        popis: `Nejkratší pražská ulice se jmenuje Jiřího Červeného, měří pouhých
+        27 metrů a nachází se na Kampě. Kromě toho, že je krátká, je
+        i velmi úzká. Propojuje ulice Hroznová a Na Kampě. Paradoxně,
+        i když se nachází v samém centru není ani moc frekventovaná.<br><br>
+
+        Své jméno má po Jiřím Červeném, který založil legendární kabaret
+        Červená sedma, a to již jako student v roce 1909, čímž si splnil svůj
+        velký sen. Fungoval až do roku 1922, kdy zanikl pro nezájem publika
+        a prošly jím takové osobnosti jako Vlasta Burian, Jindřich Plachta, 
+        Eduard Bass, Martin Frič a mnoho dalších. Ve stáří měl Jiří Červený 
+        další sen, aby po něm byla pojmenována „ulička tak malá, že bude nejmenší 
+        v celé Praze“. Měsíc před smrtí o tom napsal báseň. Tenhle sen byl ještě 
+        větší než ten první s kabaretem. Jiřímu Červenému jej splnil až v roce
+        2001 novinář Jan Petránek, který se zasloužil o to, aby se ulice vedle 
+        domu Na Kampě č. 5 pojmenovala po tomto slavném kabaretiérovi, jelikož 
+        právě tento dům Jiří Červený v roce 1959 společně se svou tehdejší ženou koupil.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/5.1.png"
+      },
+
+        "ulice-body_2": {
+        nazev: "Nejužší ulička",
+        popis: `Nejužší pražskou uličku lze nalézt jen několik set metrů od nejkratší
+        ulice směrem ke stanici metra Malostranská. Na rozdíl od ní je turisticky 
+        velmi vyhledávaná. Je bezejmenná a původně ani nešlo o uličku určenou
+        k běžnému průchodu lidí, nýbrž o uličku požární. Jde o poslední zachovalou 
+        požární uličku na Malé straně. Tyto uličky vznikaly po roce 1503 a měly 
+        zpomalovat šíření požáru mezi tehdejšími dřevěnými domy.<br><br>
+
+        Je dlouhá 13 metrů a v nejužším místě široká jen bez mála půl metru. 
+        Tvoří ji nepůvodní kamenné schody vedoucí z ulice U Lužického semináře 
+        na dvůr restaurace Čertovka na břehu Vltavy s výhledem na Prahu. 
+        Raritou uličky jsou osazené semafory pro pěší, které řídí provoz, 
+        jelikož uprostřed uličky by se dva lidé jen stěží vyhnuli.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/5.2.png"
+      },
+
+
+      // ¨6) Ostatní kuriozity
+        "ostatni-body_1": {
+        nazev: "Barrandovské koupaliště",
+        popis: `Barrandovský bazén, vybudovaný za první republiky, se
+        nachází v pražských Hlubočepích na levém břehu Vltavy.
+        Architekt Václav Kolátor jej v roce 1930 umístil do bývalého
+        lomu mezi ulice Zbraslavskou a Barrandovskou, čímž
+        vytvořil unikátní prostor pro rekreaci a sport.<br><br>
+
+        Areál byl součástí slavné restaurace Barrandovské terasy,
+        s níž byl propojen schodištěm vedoucím po skalách.
+        Dopoledne sloužil bazén veřejnosti, zatímco odpoledne
+        a večer byl využíván pro plavecké závody. S horní restaurací
+        byl propojen lanovkou, která přepravovala jídlo a nápoje
+        pro návštěvníky plovárny. Bazén fungoval od roku 1930 až
+        do roku 1965, kdy byl uzavřen a začal chátrat, i když byl
+        v roce 1993 spolu s Barrandovskými terasami prohlášen
+        za kulturní památku. I přes pokračující devastaci si bazén
+        zachoval určité kouzlo a romantiku opuštěného místa, které
+        kdysi žilo čilým ruchem a nyní zarůstá bujnou vegetací.<br><br>
+
+        Dodnes se dochovalo mnoho pozůstatků z původního areálu.
+        Ikonickou památkou je betonový skokanský můstek, který
+        se tyčí nad severní hlubší částí bazénu. V husté vegetaci
+        lze také nalézt zbytky schodišť, teras a tribun. Na jižním
+        okraji bazénu se zachoval fragment bývalé kašny. Naopak
+        ze stezky vedoucí nahoru na Terasy nezbylo už vůbec nic.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/6.1.png"
+      },
+
+        "ostatni-body_2": {
+        nazev: "Schodiště v Kunratickém lese",
+        popis: `Záhadné schody v Kunratickém lese, často přezdívaným
+        Krčský, byly po mnoho let předmětem řady teorií a diskusí.
+        Jedná se o poničené pozůstatky bývalého schodiště
+        nacházející se po levé straně asfaltové cesty mezi restaurací
+        U Krále Václava IV. a pramenem Václavka. Délka schodiště
+        je necelých 70 metrů, jejich šířka byla 4,5 metru a celkově
+        schodiště překonávalo více jak pětadvacet výškových metrů.<br><br>
+
+        Důvod a období vzniku schodiště byly dlouho neznámé.
+        Historici našli odpověď až začátkem roku 2020 díky iniciativě
+        magazínu Krčák žije. Schodiště bylo vybudováno mezi lety
+        1933 a 1938 jako součást boje s nezaměstnaností po Velké
+        hospodářské krizi. Tehdejší primátor Prahy Karel Baxa nechal
+        tedy postavit v Krčském lese schodiště, kterému se říkalo
+        hladové nebo primátorské. Schodiště bylo poničeno během
+        Pražského povstání na jaře 1945 a už nikdy nebylo obnoveno.`,
+
+        foto: "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/6.2.png"
+      },
+    };
+
+    // interakce
+    function addInteractions() {
+      pointLayers.forEach(id => {
+        if (!map.getLayer(id)) return;
+
+        map.on('mouseenter', id, () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', id, () => {
+          map.getCanvas().style.cursor = '';
+        });
+
+        map.on('click', id, (e) => {
+          const f = e.features[0];
+          const p = f.properties || {};
+          const cfg = categoryConfig[id] || {};
+          const catKey = cfg.key || '';
+          const catLabel = cfg.label || '';
+
+          const key = `${id}_${p.OBJECTID}`;
+          const d = detailData[key] || {};
+
+          const nazev = d.nazev || `Kuriozita #${p.OBJECTID || ''}`;
+          const popis = d.popis || 'Zde je potřeba doplnit popis v detailData :).';
+          const foto  = d.foto  || '';
+ 
+          const badgeClass = catKey ? `badge-${catKey}` : '';
+
+          let html = `<h2>${nazev}</h2>`;
+          if (catLabel) {
+            html += `<div class="badge ${badgeClass}">${catLabel}</div>`;
+          }
+          html += `<p>${popis}</p>`;
+
+          if (foto) {
+            html += `<img class="detail-foto" src="${foto}" alt="${nazev}" />`;
+          }
+
+          if (p.OBJECTID) {
+            html += `<p style="font-size:12px;color:#666;">OBJECTID: ${p.OBJECTID}</p>`;
+          }
+
+          sidebar.innerHTML = html;
+        });
+      });
+
+      // pomocné funkce interaktivity
+      setLayerVisibility();
+    }
+
+    function setStyle(styleUrl) {
+      map.setStyle(styleUrl);
+      map.once('load', () => {
+        addInteractions();
+        setLayerVisibility();
+      });
+    }
+
+    map.on('load', () => {
+      addInteractions();
+
+      // filtr kategorií
+      class CategoryFilterControl {
+      onAdd(mapInstance) {
+      this._map = mapInstance;
+
+      const container = document.createElement('div');
+      container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group category-filter';
+
+      const toggle = document.createElement('button');
+      toggle.textContent = 'Filtr kuriozit';
+      toggle.style.display = 'block';
+      toggle.style.width = '100%';
+      container.appendChild(toggle);
+
+      const panel = document.createElement('div');
+      panel.style.display = 'none';
+      panel.style.marginTop = '4px';
+      container.appendChild(panel);
+
+      toggle.onclick = () => {
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      };
+
+      const title = document.createElement('div');
+      title.textContent = 'Zobrazit:';
+      title.style.fontWeight = 'bold';
+      title.style.marginBottom = '2px';
+      panel.appendChild(title);
+
+      Object.values(categoryConfig).forEach(cfg => {
+        const label = document.createElement('label');
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+
+        cb.checked = checkboxState[cfg.key] !== undefined
+          ? checkboxState[cfg.key]
+          : true;
+
+        cb.value = cfg.key;
+        cb.onchange = () => {
+          checkboxState[cfg.key] = cb.checked;
+
+          if (cb.checked) {
+            visibleCategories.add(cfg.key);
+          } else {
+            visibleCategories.delete(cfg.key);
+          }
+          setLayerVisibility();
+        };
+
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(' ' + cfg.label));
+        panel.appendChild(label);
+      });
+
+      this._container = container;
+      return container;
+      }
+
+      onRemove() {
+        this._container.remove();
+        this._map = undefined;
+      }
+    }
+
+      map.addControl(new CategoryFilterControl(), 'top-right');
+    });
+
+    // === PŘEPÍNÁNÍ LIGHT / DARK === 
+    const dotDark  = document.getElementById('mode-dot-dark');
+    const dotLight = document.getElementById('mode-dot-light');
+
+    function setBaseStyle(styleUrl, mode) {
+      map.setStyle(styleUrl);
+
+      if (mode === 'dark') {
+        dotDark.textContent  = '◉';
+        dotLight.textContent = '◯';
+      } else {
+        dotDark.textContent  = '◯';
+        dotLight.textContent = '◉';
+      }
+
+      map.once('load', () => {
+        addInteractions();
+        map.addControl(new CategoryFilterControl(), 'top-right');
+        setLayerVisibility();
+      });
+    }
+
+    dotDark.addEventListener('click', () => {
+      setBaseStyle(darkStyle, 'dark');
+    });
+    dotLight.addEventListener('click', () => {
+      setBaseStyle(lightStyle, 'light');
+    });
+
+    // === NASTAVENÍ DIVIDERU ===
+    const divider = document.getElementById('divider');
+    const app = document.querySelector('.app');
+    const mapEl = document.getElementById('map');
+    const sidebarEl = document.getElementById('sidebar');
+    let isDragging = false;
+
+    divider.addEventListener('mousedown', () => { isDragging = true; });
+    window.addEventListener('mouseup', () => { isDragging = false; });
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+
+      const rect = app.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percent = (x / rect.width) * 100;
+
+      const min = 30;
+      const max = 70;
+      const mapPercent = Math.min(max, Math.max(min, percent));
+      const sidePercent = 100 - mapPercent;
+
+      mapEl.style.flexBasis = mapPercent + '%';
+      sidebarEl.style.flexBasis = sidePercent + '%';
+
+      map.resize();
+    });
+  </script>
+</body>
+</html>
