@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="cs"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mapa kuriozit — Atlas pražských kuriozit</title>
+<meta name="description" content="Interaktivní mapa všech lokalit atlasu. Klikněte na bod a otevřete detail lokality.">
+<link rel="stylesheet" href="../css/atlas.css">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.17.0/mapbox-gl.css" rel="stylesheet">
+</head><body>
+<header class="site-head"><div class="wrap bar">
+<a class="wordmark" href="../">Atlas pražských <span>kuriozit</span></a>
+<nav class="nav"><a href="../">Atlas</a><a href="../mapa/" aria-current="page">Mapa</a><a href="../kapitoly/">Kapitoly</a><a href="../o-atlasu/">O atlasu</a></nav>
+<span class="spacer"></span>
+<a class="btn btn-primary btn-sm" href="../o-atlasu/">Stáhnout atlas</a>
+</div><div class="chapter-rule"><span style="background:#d2a3b9"></span><span style="background:#a7d5a0"></span><span style="background:#c8c2c6"></span><span style="background:#84d2f5"></span><span style="background:#f28a99"></span><span style="background:#f2e4cf"></span></div></header>
+<main>
+<div class="wrap" style="padding:var(--sp-6) var(--sp-6) var(--sp-5)">
+<div style="display:flex;align-items:flex-end;gap:var(--sp-5);flex-wrap:wrap"><div style="flex:1"><h1>Mapa kuriozit</h1><div class="small muted" style="margin-top:var(--sp-2)">23 lokalit · 6 kapitol · stav mapových výstupů k roku 2023</div></div>
+<div id="layers" class="panel" style="display:flex;flex-wrap:wrap;gap:var(--sp-3);min-width:auto"><label><input type="checkbox" value="geo" checked><span class="dot" style="background:#d2a3b9"></span>Geografické extrémy</label><label><input type="checkbox" value="priroda" checked><span class="dot" style="background:#a7d5a0"></span>Příroda</label><label><input type="checkbox" value="podzemi" checked><span class="dot" style="background:#c8c2c6"></span>Podzemí</label><label><input type="checkbox" value="doprava" checked><span class="dot" style="background:#84d2f5"></span>Doprava</label><label><input type="checkbox" value="ulice" checked><span class="dot" style="background:#f28a99"></span>Ulice</label><label><input type="checkbox" value="ostatni" checked><span class="dot" style="background:#f2e4cf"></span>Ostatní kuriozity</label></div></div>
+</div>
+<div class="map-shell">
+<div style="position:relative"><div id="map"></div>
+<div class="map-tools"><button id="style-toggle" class="btn btn-secondary btn-sm" data-mode="light">Tmavá mapa</button></div>
+<div class="map-note">Podkladová mapa: Mapbox · body: vrstvy atlasu</div></div>
+<aside class="map-side" id="detail">
+<h2>Vyberte bod na mapě</h2>
+<p class="small muted">Kliknutím na bod se zde otevře popis lokality a odkaz na její stránku.</p>
+<div class="eyebrow" style="color:var(--text-faint);margin:var(--sp-5) 0 var(--sp-3)">Všechny lokality</div>
+<ul class="map-list"><li><a href="../lokalita/prazske-poly/"><span class="dot" style="background:#d2a3b9"></span><span>Pražské póly</span></a></li><li><a href="../lokalita/nejnizsi-bod/"><span class="dot" style="background:#d2a3b9"></span><span>Nejnižší bod</span></a></li><li><a href="../lokalita/nejvyssi-bod/"><span class="dot" style="background:#d2a3b9"></span><span>Nejvyšší bod</span></a></li><li><a href="../lokalita/prazske-stredy/"><span class="dot" style="background:#d2a3b9"></span><span>Středy</span></a></li><li><a href="../lokalita/vodopady/"><span class="dot" style="background:#a7d5a0"></span><span>Vodopády</span></a></li><li><a href="../lokalita/vodopady-v-modranske-rokli/"><span class="dot" style="background:#a7d5a0"></span><span>Vodopády v Modřanské rokli</span></a></li><li><a href="../lokalita/umele-kopce/"><span class="dot" style="background:#a7d5a0"></span><span>Umělé kopce</span></a></li><li><a href="../lokalita/milicovsky-vrch/"><span class="dot" style="background:#a7d5a0"></span><span>Milíčovský vrch</span></a></li><li><a href="../lokalita/soutok-berounky-a-vltavy/"><span class="dot" style="background:#a7d5a0"></span><span>Soutok Berounky a Vltavy</span></a></li><li><a href="../lokalita/jeskyne/"><span class="dot" style="background:#c8c2c6"></span><span>Jeskyně</span></a></li><li><a href="../lokalita/podzemni-toky/"><span class="dot" style="background:#c8c2c6"></span><span>Podzemní toky</span></a></li><li><a href="../lokalita/mala-ricka/"><span class="dot" style="background:#c8c2c6"></span><span>Malá říčka</span></a></li><li><a href="../lokalita/tunely-lomu-pozary/"><span class="dot" style="background:#c8c2c6"></span><span>Opuštěné tunely lomu Požáry</span></a></li><li><a href="../lokalita/zanikla-nadrazi/"><span class="dot" style="background:#84d2f5"></span><span>Zaniklá nádraží</span></a></li><li><a href="../lokalita/smichov-severni-nastupiste/"><span class="dot" style="background:#84d2f5"></span><span>Smíchov severní nástupiště</span></a></li><li><a href="../lokalita/tramvajove-kuriozity/"><span class="dot" style="background:#84d2f5"></span><span>Tramvajové kuriozity</span></a></li><li><a href="../lokalita/smycka-dlabacov/"><span class="dot" style="background:#84d2f5"></span><span>Smyčka Dlabačov</span></a></li><li><a href="../lokalita/nedokonceny-most/"><span class="dot" style="background:#84d2f5"></span><span>Nedokončený most přes Pražský okruh</span></a></li><li><a href="../lokalita/nejkratsi-ulice/"><span class="dot" style="background:#f28a99"></span><span>Nejkratší ulice</span></a></li><li><a href="../lokalita/nejuzsi-ulicka/"><span class="dot" style="background:#f28a99"></span><span>Nejužší ulička</span></a></li><li><a href="../lokalita/barrandovske-koupaliste/"><span class="dot" style="background:#f2e4cf"></span><span>Barrandovské koupaliště</span></a></li><li><a href="../lokalita/schodiste-v-kunratickem-lese/"><span class="dot" style="background:#f2e4cf"></span><span>Schodiště v Kunratickém lese</span></a></li><li><a href="../lokalita/bunkry-a-pozorovatelny/"><span class="dot" style="background:#f2e4cf"></span><span>Bunkry a pozorovatelny</span></a></li></ul>
+</aside>
+</div></main>
+<footer class="site-foot"><div class="wrap cols">
+<div><span class="wordmark">Atlas pražských <span>kuriozit</span></span>
+<p class="small" style="margin-top:var(--sp-4);max-width:40ch;color:var(--ink-4)">Václav Jícha, 2024. Atlas byl vytvořen v rámci bakalářské práce na Přírodovědecká fakulta Univerzity Karlovy. Vedoucí práce: RNDr. Jakub Lysák, Ph.D..</p></div>
+<div><div class="head">Kapitoly</div><a href="../kapitoly/#geo"><span class="dot" style="background:#d2a3b9"></span>Geografické extrémy</a><a href="../kapitoly/#priroda"><span class="dot" style="background:#a7d5a0"></span>Příroda</a><a href="../kapitoly/#podzemi"><span class="dot" style="background:#c8c2c6"></span>Podzemí</a><a href="../kapitoly/#doprava"><span class="dot" style="background:#84d2f5"></span>Doprava</a><a href="../kapitoly/#ulice"><span class="dot" style="background:#f28a99"></span>Ulice</a><a href="../kapitoly/#ostatni"><span class="dot" style="background:#f2e4cf"></span>Ostatní kuriozity</a></div>
+<div><div class="head">Atlas</div><a href="../mapa/">Mapa</a><a href="../kapitoly/">Kapitoly</a><a href="../o-atlasu/#legenda">Legenda</a><a href="../o-atlasu/">Ke stažení</a></div>
+</div><div class="wrap bottom"><span>© 2024 Václav Jícha</span><span>Zdroje prostorových dat: AOPK, Arcdata Praha, ČÚZK, Geoportál Praha</span></div></footer>
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.17.0/mapbox-gl.js"></script>
+<script src="../js/map-data.js"></script>
+<script src="../js/mapa.js"></script>
+</body></html>
