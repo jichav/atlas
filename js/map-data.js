@@ -75,8 +75,8 @@ window.ATLAS_MAP = {
    "slug": "prazske-poly",
    "chapter": "geo",
    "teaser": "Čtyři krajní body Prahy označil IPR betonovými sloupky. Od skutečné polohy se vždy trochu liší.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.1.png",
-   "mapRef": "1.1",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/1.1.svg",
+   "mapRef": "1.1–1.4",
    "page": 8
   },
   "nejnizsi": {
@@ -84,7 +84,7 @@ window.ATLAS_MAP = {
    "slug": "nejnizsi-bod",
    "chapter": "geo",
    "teaser": "Hladina Vltavy na severním okraji Prahy. Nejhlubší místo řeky je mezi Žofínem a Střeleckým ostrovem.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.5.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/1.5.svg",
    "mapRef": "1.5",
    "page": 10
   },
@@ -93,8 +93,8 @@ window.ATLAS_MAP = {
    "slug": "nejvyssi-bod",
    "chapter": "geo",
    "teaser": "Nejvyšší místo Prahy leží u vysílače Teleček. Vysílač sám stojí o metr a půl níž.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.6.png",
-   "mapRef": "1.6",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/1.6.svg",
+   "mapRef": "1.6–1.7",
    "page": 12
   },
   "stredy": {
@@ -102,16 +102,16 @@ window.ATLAS_MAP = {
    "slug": "prazske-stredy",
    "chapter": "geo",
    "teaser": "Střed města lze určit několika způsoby. Každý z nich odráží jiný aspekt rozlehlosti a tvaru Prahy.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/1.8.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/1.8.svg",
    "mapRef": "1.8",
    "page": 16
   },
   "vodopady": {
-   "title": "Vodopády",
+   "title": "Vodopády a kaskády v Zoo Praha",
    "slug": "vodopady",
    "chapter": "priroda",
-   "teaser": "Většina pražských vodopádů je umělá a leží ve výbězích a interiérech pavilonů zoo.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/2.1.png",
+   "teaser": "V areálu zoo se nachází patnáct vodopádů a kaskád, většina ve výbězích a interiérech pavilonů.",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/2.1.svg",
    "mapRef": "2.1",
    "page": 18
   },
@@ -120,25 +120,16 @@ window.ATLAS_MAP = {
    "slug": "vodopady-v-modranske-rokli",
    "chapter": "priroda",
    "teaser": "Vodopád na levém přítoku Lhotského potoka se mění před očima — v roce 2015 měřil 2,3 m, dnes méně.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/2.2.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/2.2.svg",
    "mapRef": "2.2",
    "page": 22
-  },
-  "kopce": {
-   "title": "Umělé kopce",
-   "slug": "umele-kopce",
-   "chapter": "priroda",
-   "teaser": "Navážky odpadu a výkopové zeminy z metra. Na jedné z nich vede 5,5 km singltrailu.",
-   "image": "",
-   "mapRef": "",
-   "page": 24
   },
   "milicov": {
    "title": "Milíčovský vrch",
    "slug": "milicovsky-vrch",
    "chapter": "priroda",
    "teaser": "Hráz nádrže Křtiny, nášlapné kameny a strmá cesta mezi kopci.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/2.3.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/2.3.svg",
    "mapRef": "2.3",
    "page": 26
   },
@@ -147,34 +138,16 @@ window.ATLAS_MAP = {
    "slug": "soutok-berounky-a-vltavy",
    "chapter": "priroda",
    "teaser": "Chystaný park u soutoku bude přibližně třináctkrát větší než Stromovka.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/2.4.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/2.4.svg",
    "mapRef": "2.4",
    "page": 28
-  },
-  "jeskyne": {
-   "title": "Jeskyně",
-   "slug": "jeskyne",
-   "chapter": "podzemi",
-   "teaser": "Klukovické jeskyně sloužily jako nouzové obydlí i v první polovině 20. století.",
-   "image": "",
-   "mapRef": "",
-   "page": 30
-  },
-  "toky": {
-   "title": "Podzemní toky",
-   "slug": "podzemni-toky",
-   "chapter": "podzemi",
-   "teaser": "Zatrubněné toky z minulého století mají obdélný betonový profil překrytý deskami.",
-   "image": "",
-   "mapRef": "",
-   "page": 32
   },
   "malaricka": {
    "title": "Malá říčka",
    "slug": "mala-ricka",
    "chapter": "podzemi",
    "teaser": "Lokalita s potenciálem stát se kultovním místem fanoušků pražské kanalizace. Přístup je zapovězen.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/3.1.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/3.1.svg",
    "mapRef": "3.1",
    "page": 34
   },
@@ -183,43 +156,25 @@ window.ATLAS_MAP = {
    "slug": "tunely-lomu-pozary",
    "chapter": "podzemi",
    "teaser": "Tunel bývalé malodrážky u stále funkčního lomu. Vstup do areálu je přísně zakázán.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/3.2.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/3.2.svg",
    "mapRef": "3.2",
    "page": 36
-  },
-  "nadrazi": {
-   "title": "Zaniklá nádraží",
-   "slug": "zanikla-nadrazi",
-   "chapter": "doprava",
-   "teaser": "Rozlehlé areály, které za několik let budou přestaveny k nepoznání.",
-   "image": "",
-   "mapRef": "",
-   "page": 38
   },
   "smichov": {
    "title": "Smíchov severní nástupiště",
    "slug": "smichov-severni-nastupiste",
    "chapter": "doprava",
    "teaser": "Nástupiště, které přežilo provoz. Zbývá z něj hrana a přístupová cesta.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/4.1.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/4.1.svg",
    "mapRef": "4.1",
    "page": 40
-  },
-  "tramvaje": {
-   "title": "Tramvajové kuriozity",
-   "slug": "tramvajove-kuriozity",
-   "chapter": "doprava",
-   "teaser": "Fragment kolejí na bývalém Trojském tramvajovém mostě a historická okružní linka 42.",
-   "image": "",
-   "mapRef": "",
-   "page": 42
   },
   "dlabacov": {
    "title": "Smyčka Dlabačov",
    "slug": "smycka-dlabacov",
    "chapter": "doprava",
    "teaser": "Výchozí a konečná stanice historické linky. Vedle Strahovských kolejí s kapacitou přes 4 700 lůžek.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/4.2.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/4.2.svg",
    "mapRef": "4.2",
    "page": 44
   },
@@ -228,7 +183,7 @@ window.ATLAS_MAP = {
    "slug": "nedokonceny-most",
    "chapter": "doprava",
    "teaser": "Most stojí, napojení Modřan na okruh ne. O řešení se stále diskutuje.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/4.3.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/4.3.svg",
    "mapRef": "4.3",
    "page": 46
   },
@@ -237,7 +192,7 @@ window.ATLAS_MAP = {
    "slug": "nejkratsi-ulice",
    "chapter": "ulice",
    "teaser": "Měří 27 metrů, propojuje Hroznovou a Na Kampě. Jméno dostala v roce 2001.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/5.1.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/5.1.svg",
    "mapRef": "5.1",
    "page": 48
   },
@@ -246,7 +201,7 @@ window.ATLAS_MAP = {
    "slug": "nejuzsi-ulicka",
    "chapter": "ulice",
    "teaser": "Provoz řídí semafor — uprostřed uličky by se dva lidé jen stěží vyhnuli.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/5.2.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/5.2.svg",
    "mapRef": "5.2",
    "page": 51
   },
@@ -255,7 +210,7 @@ window.ATLAS_MAP = {
    "slug": "barrandovske-koupaliste",
    "chapter": "ostatni",
    "teaser": "Z bazénu zbyl fragment kašny. Ze stezky na Terasy nezbylo vůbec nic.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/6.1.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/6.1.svg",
    "mapRef": "6.1",
    "page": 52
   },
@@ -264,18 +219,45 @@ window.ATLAS_MAP = {
    "slug": "schodiste-v-kunratickem-lese",
    "chapter": "ostatni",
    "teaser": "Poškozeno během Pražského povstání na jaře 1945 a už nikdy nebylo obnoveno.",
-   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/6.2.png",
+   "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/6.2.svg",
    "mapRef": "6.2",
    "page": 54
-  },
-  "bunkry": {
-   "title": "Bunkry a pozorovatelny",
-   "slug": "bunkry-a-pozorovatelny",
-   "chapter": "ostatni",
-   "teaser": "Pozorovatelny stojí v holešovickém přístavu naproti Státní plavební správě a v areálu Waltrovky.",
-   "image": "",
-   "mapRef": "",
-   "page": 56
   }
- }
+ },
+ "points": {
+  "extremy-body_1": {
+   "ref": "1.3",
+   "name": "Nejjižnější bod"
+  },
+  "extremy-body_2": {
+   "ref": "1.4",
+   "name": "Nejzápadnější bod"
+  },
+  "extremy-body_3": {
+   "ref": "1.1",
+   "name": "Nejsevernější bod"
+  },
+  "extremy-body_4": {
+   "ref": "1.2",
+   "name": "Nejvýchodnější bod"
+  },
+  "extremy-body_5": {
+   "ref": "1.5",
+   "name": "Hladina Vltavy v Zámcích, 175,4 m n. m."
+  },
+  "extremy-body_6": {
+   "ref": "1.7",
+   "name": "Teleček, 399,2 m n. m."
+  }
+ },
+ "bounds": [
+  [
+   14.2,
+   49.93
+  ],
+  [
+   14.72,
+   50.19
+  ]
+ ]
 };
