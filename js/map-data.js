@@ -1,7 +1,6 @@
 window.ATLAS_MAP = {
  "token": "pk.eyJ1IjoiamljaGF2IiwiYSI6ImNtamI5cDhjMTA3b3AzZXF1bzk2bmh2YTEifQ.RxFPcew4w2_AV75i1lNxwQ",
- "styleLight": "mapbox://styles/jichav/cmjo9d54v00e601sb5kkifzkx",
- "styleDark": "mapbox://styles/jichav/cmjba1tt5000d01s37ct13ujt",
+ "styleLight": "mapbox://styles/jichav/cmjba1tt5000d01s37ct13ujt",
  "layers": {
   "geo": "extremy-body",
   "priroda": "priroda-body",
@@ -15,37 +14,353 @@ window.ATLAS_MAP = {
    "key": "geo",
    "label": "Geografické extrémy",
    "color": "#d2a3b9",
-   "layer": "extremy-body"
+   "layer": "extremy-body",
+   "pointColor": "#f17eac",
+   "data": {
+    "type": "FeatureCollection",
+    "features": [
+     {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.395540794162798,
+        49.94191605341168
+       ]
+      },
+      "properties": {
+       "OBJECTID": 1
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.225155779240108,
+        50.10398582020466
+       ]
+      },
+      "properties": {
+       "OBJECTID": 2
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 3,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.527091177618965,
+        50.17736146594304
+       ]
+      },
+      "properties": {
+       "OBJECTID": 3
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 4,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.706456182414735,
+        50.087458411934335
+       ]
+      },
+      "properties": {
+       "OBJECTID": 4
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 5,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.398060256819363,
+        50.14344221760046
+       ]
+      },
+      "properties": {
+       "OBJECTID": 5
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 6,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.264079402310262,
+        50.05278167674325
+       ]
+      },
+      "properties": {
+       "OBJECTID": 6
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 7,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.480633228852342,
+        50.094511940525834
+       ]
+      },
+      "properties": {
+       "OBJECTID": 7
+      }
+     }
+    ]
+   }
   },
   {
    "key": "priroda",
    "label": "Příroda",
    "color": "#a7d5a0",
-   "layer": "priroda-body"
+   "layer": "priroda-body",
+   "pointColor": "hsl(123, 41%, 45%)",
+   "data": {
+    "type": "FeatureCollection",
+    "features": [
+     {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.452897509096543,
+        49.998401535928544
+       ]
+      },
+      "properties": {
+       "OBJECTID": 1
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.528693562778363,
+        50.02320576179685
+       ]
+      },
+      "properties": {
+       "OBJECTID": 2
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 3,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.400833760343293,
+        49.99448902544742
+       ]
+      },
+      "properties": {
+       "OBJECTID": 3
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 6,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.40574010869352,
+        50.11903270599592
+       ]
+      },
+      "properties": {
+       "OBJECTID": 6
+      }
+     }
+    ]
+   }
   },
   {
    "key": "podzemi",
    "label": "Podzemí",
    "color": "#c8c2c6",
-   "layer": "podzemi-body"
+   "layer": "podzemi-body",
+   "pointColor": "#8a8a8a",
+   "data": {
+    "type": "FeatureCollection",
+    "features": [
+     {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.406602835421031,
+        50.1076746073862
+       ]
+      },
+      "properties": {
+       "OBJECTID": 1
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.324471980933225,
+        50.02867774780227
+       ]
+      },
+      "properties": {
+       "OBJECTID": 2
+      }
+     }
+    ]
+   }
   },
   {
    "key": "doprava",
    "label": "Doprava",
    "color": "#84d2f5",
-   "layer": "doprava-body"
+   "layer": "doprava-body",
+   "pointColor": "hsl(208, 79%, 51%)",
+   "data": {
+    "type": "FeatureCollection",
+    "features": [
+     {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.40711604384117,
+        50.062656484369874
+       ]
+      },
+      "properties": {
+       "OBJECTID": 1
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.3845633481532,
+        50.08578041821036
+       ]
+      },
+      "properties": {
+       "OBJECTID": 2
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 3,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.404178732525152,
+        49.982401216624126
+       ]
+      },
+      "properties": {
+       "OBJECTID": 3
+      }
+     }
+    ]
+   }
   },
   {
    "key": "ulice",
    "label": "Ulice",
    "color": "#f28a99",
-   "layer": "ulice-body"
+   "layer": "ulice-body",
+   "pointColor": "#ee536a",
+   "data": {
+    "type": "FeatureCollection",
+    "features": [
+     {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.408205983250099,
+        50.08596831109205
+       ]
+      },
+      "properties": {
+       "OBJECTID": 1
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.409490743888007,
+        50.087906764912645
+       ]
+      },
+      "properties": {
+       "OBJECTID": 2
+      }
+     }
+    ]
+   }
   },
   {
    "key": "ostatni",
    "label": "Ostatní kuriozity",
-   "color": "#f2e4cf",
-   "layer": "ostatni-body"
+   "color": "#e6c39b",
+   "layer": "ostatni-body",
+   "pointColor": "#fcb35a",
+   "data": {
+    "type": "FeatureCollection",
+    "features": [
+     {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.402624930052944,
+        50.03677519337802
+       ]
+      },
+      "properties": {
+       "OBJECTID": 1
+      }
+     },
+     {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+       "type": "Point",
+       "coordinates": [
+        14.479398437900475,
+        50.02436686110744
+       ]
+      },
+      "properties": {
+       "OBJECTID": 2
+      }
+     }
+    ]
+   }
   }
  ],
  "features": {
@@ -67,14 +382,15 @@ window.ATLAS_MAP = {
   "ulice-body_1": "nejkratsi",
   "ulice-body_2": "nejuzsi",
   "ostatni-body_1": "barrandov",
-  "ostatni-body_2": "schodiste"
+  "ostatni-body_2": "schodiste",
+  "priroda-body_6": "vodopady"
  },
  "entries": {
   "poly": {
    "title": "Pražské póly",
    "slug": "prazske-poly",
    "chapter": "geo",
-   "teaser": "Čtyři krajní body Prahy označil IPR betonovými sloupky. Od skutečné polohy se vždy trochu liší.",
+   "teaser": "Čtyři krajní body Prahy. Betonové sloupky je označují jen přibližně – skutečná hranice města často leží o několik metrů jinde",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/1.1.svg",
    "mapRef": "1.1–1.4",
    "page": 8
@@ -83,7 +399,7 @@ window.ATLAS_MAP = {
    "title": "Nejnižší bod",
    "slug": "nejnizsi-bod",
    "chapter": "geo",
-   "teaser": "Hladina Vltavy na severním okraji Prahy. Nejhlubší místo řeky je mezi Žofínem a Střeleckým ostrovem.",
+   "teaser": "Vltava opouští Prahu na severu Prahy oblasti zvané Zámky. Výška její hladiny zde kolísá přibližně kolem 175,4 m n. m.",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/1.5.svg",
    "mapRef": "1.5",
    "page": 10
@@ -92,7 +408,7 @@ window.ATLAS_MAP = {
    "title": "Nejvyšší bod",
    "slug": "nejvyssi-bod",
    "chapter": "geo",
-   "teaser": "Nejvyšší místo Prahy leží u vysílače Teleček. Vysílač sám stojí o metr a půl níž.",
+   "teaser": "Nejvýše položené místo Prahy není na Petříně ani na Bílé hoře. Leží v poli u Zličína, na západní hranici města",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/1.6.svg",
    "mapRef": "1.6–1.7",
    "page": 12
@@ -101,7 +417,7 @@ window.ATLAS_MAP = {
    "title": "Středy",
    "slug": "prazske-stredy",
    "chapter": "geo",
-   "teaser": "Střed města lze určit několika způsoby. Každý z nich odráží jiný aspekt rozlehlosti a tvaru Prahy.",
+   "teaser": "Praha nemá jeden daný střed. Záleží na tom, zda hledáme těžiště území, průsečík krajních bodů nebo místo nejdále od hranice",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/1.8.svg",
    "mapRef": "1.8",
    "page": 16
@@ -110,7 +426,7 @@ window.ATLAS_MAP = {
    "title": "Vodopády a kaskády v Zoo Praha",
    "slug": "vodopady",
    "chapter": "priroda",
-   "teaser": "V areálu zoo se nachází patnáct vodopádů a kaskád, většina ve výbězích a interiérech pavilonů.",
+   "teaser": "Areál zoologické zahrady ukrývá patnáct vodopádů a vodních kaskád, většina z nich je součástí výběhů a pavilonů",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/2.1.svg",
    "mapRef": "2.1",
    "page": 18
@@ -119,7 +435,7 @@ window.ATLAS_MAP = {
    "title": "Vodopády v Modřanské rokli",
    "slug": "vodopady-v-modranske-rokli",
    "chapter": "priroda",
-   "teaser": "Vodopád na levém přítoku Lhotského potoka se mění před očima — v roce 2015 měřil 2,3 m, dnes méně.",
+   "teaser": "Voda zde stále mění podobu rokle. Jeden z vodopádů měl před lety přes dva metry, postupná eroze jeho výšku neustále snižuje",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/2.2.svg",
    "mapRef": "2.2",
    "page": 22
@@ -128,7 +444,7 @@ window.ATLAS_MAP = {
    "title": "Milíčovský vrch",
    "slug": "milicovsky-vrch",
    "chapter": "priroda",
-   "teaser": "Hráz nádrže Křtiny, nášlapné kameny a strmá cesta mezi kopci.",
+   "teaser": "Tři kopce u stanice metra Háje vznikly z výkopového materiálu při stavbě Jižního Města a linky metra C",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/2.3.svg",
    "mapRef": "2.3",
    "page": 26
@@ -137,7 +453,7 @@ window.ATLAS_MAP = {
    "title": "Soutok Berounky a Vltavy",
    "slug": "soutok-berounky-a-vltavy",
    "chapter": "priroda",
-   "teaser": "Chystaný park u soutoku bude přibližně třináctkrát větší než Stromovka.",
+   "teaser": "Na okraji Prahy se setkávají dvě velké řeky. Jejich niva má přes 1 300 hektarů a má se proměnit v rozsáhlý příměstský park",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/2.4.svg",
    "mapRef": "2.4",
    "page": 28
@@ -146,7 +462,7 @@ window.ATLAS_MAP = {
    "title": "Malá říčka",
    "slug": "mala-ricka",
    "chapter": "podzemi",
-   "teaser": "Lokalita s potenciálem stát se kultovním místem fanoušků pražské kanalizace. Přístup je zapovězen.",
+   "teaser": "Pozůstatek vltavského ramene ve Stromovce se pod zemí setkává s Dejvickým potokem",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/3.1.svg",
    "mapRef": "3.1",
    "page": 34
@@ -155,7 +471,7 @@ window.ATLAS_MAP = {
    "title": "Opuštěné tunely lomu Požáry",
    "slug": "tunely-lomu-pozary",
    "chapter": "podzemi",
-   "teaser": "Tunel bývalé malodrážky u stále funkčního lomu. Vstup do areálu je přísně zakázán.",
+   "teaser": "V bývalých vápencových lomech zůstaly tunely po malodrážce i štoly propojující jednotlivé části těžebního prostoru",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/3.2.svg",
    "mapRef": "3.2",
    "page": 36
@@ -164,7 +480,7 @@ window.ATLAS_MAP = {
    "title": "Smíchov severní nástupiště",
    "slug": "smichov-severni-nastupiste",
    "chapter": "doprava",
-   "teaser": "Nástupiště, které přežilo provoz. Zbývá z něj hrana a přístupová cesta.",
+   "teaser": "Někdejší nádraží fungovalo od roku 1862. Provoz skončil v říjnu 2023 a areál čeká rozsáhlá proměna",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/4.1.svg",
    "mapRef": "4.1",
    "page": 40
@@ -173,7 +489,7 @@ window.ATLAS_MAP = {
    "title": "Smyčka Dlabačov",
    "slug": "smycka-dlabacov",
    "chapter": "doprava",
-   "teaser": "Výchozí a konečná stanice historické linky. Vedle Strahovských kolejí s kapacitou přes 4 700 lůžek.",
+   "teaser": "Bývalé „tramvajové nádraží“ pod Strahovem dnes slouží mimo jiné historické lince 42 a ukrývá bistro ve vyřazeném voze T3",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/4.2.svg",
    "mapRef": "4.2",
    "page": 44
@@ -182,7 +498,7 @@ window.ATLAS_MAP = {
    "title": "Nedokončený most přes Pražský okruh",
    "slug": "nedokonceny-most",
    "chapter": "doprava",
-   "teaser": "Most stojí, napojení Modřan na okruh ne. O řešení se stále diskutuje.",
+   "teaser": "Most u Komořan měl napojit Modřany na Pražský okruh. Stavba byla zastavena a konstrukce stojí nedokončená dodnes",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/4.3.svg",
    "mapRef": "4.3",
    "page": 46
@@ -191,7 +507,7 @@ window.ATLAS_MAP = {
    "title": "Nejkratší ulice",
    "slug": "nejkratsi-ulice",
    "chapter": "ulice",
-   "teaser": "Měří 27 metrů, propojuje Hroznovou a Na Kampě. Jméno dostala v roce 2001.",
+   "teaser": "Ulice Jiřího Červeného na Kampě měří 27 metrů. Název získala až v roce 2001, podle přání samotného kabaretiéra",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/5.1.svg",
    "mapRef": "5.1",
    "page": 48
@@ -200,7 +516,7 @@ window.ATLAS_MAP = {
    "title": "Nejužší ulička",
    "slug": "nejuzsi-ulicka",
    "chapter": "ulice",
-   "teaser": "Provoz řídí semafor — uprostřed uličky by se dva lidé jen stěží vyhnuli.",
+   "teaser": "Třináct metrů dlouhý průchod na Malé Straně má v nejužším místě necelého půl metru. Provoz zde řídí semafor",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/5.2.svg",
    "mapRef": "5.2",
    "page": 51
@@ -209,7 +525,7 @@ window.ATLAS_MAP = {
    "title": "Barrandovské koupaliště",
    "slug": "barrandovske-koupaliste",
    "chapter": "ostatni",
-   "teaser": "Z bazénu zbyl fragment kašny. Ze stezky na Terasy nezbylo vůbec nic.",
+   "teaser": "Z někdejšího koupaliště pod Barrandovskými terasami zůstaly zarostlé zbytky bazénu, teras, schodišť i fragment kašny",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/6.1.svg",
    "mapRef": "6.1",
    "page": 52
@@ -218,7 +534,7 @@ window.ATLAS_MAP = {
    "title": "Schodiště v Kunratickém lese",
    "slug": "schodiste-v-kunratickem-lese",
    "chapter": "ostatni",
-   "teaser": "Poškozeno během Pražského povstání na jaře 1945 a už nikdy nebylo obnoveno.",
+   "teaser": "Poškozené schodiště vzniklo ve 30. letech jako práce pro nezaměstnané. Během Pražského povstání bylo zničeno a už nebylo obnoveno",
    "image": "https://raw.githubusercontent.com/jichav/atlas/refs/heads/main/images/mapy/6.2.svg",
    "mapRef": "6.2",
    "page": 54
@@ -259,5 +575,11 @@ window.ATLAS_MAP = {
    14.72,
    50.19
   ]
- ]
+ ],
+ "paintDefault": {
+  "circle-radius": 6.5,
+  "circle-opacity": 0.75,
+  "circle-stroke-width": 2,
+  "circle-emissive-strength": 1
+ }
 };
